@@ -16,7 +16,7 @@ pipeline {
     }
 
     stages {
-        stage('Git Resource from Git'){ 
+        stage('Get Resource from Git'){ 
             steps{
                 git branch: "${env.projectBranch}", url: 'https://github.com/Vicheak/reactjs-testing.git'
             }
