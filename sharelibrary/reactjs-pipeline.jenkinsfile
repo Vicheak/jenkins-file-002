@@ -34,6 +34,12 @@ pipeline {
     }
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
         stage('Get Resource from SCM') {
             steps {
                 echo "TEST_CHOICE is ${TEST_CHOICE}"
