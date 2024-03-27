@@ -18,8 +18,8 @@ pipeline {
             steps {
                 echo "Build in Jenkins"
                 sh '''
-                    docker install --force
-                    docker run build
+                    npm install --force
+                    npm run build
                 '''
             }
         }
