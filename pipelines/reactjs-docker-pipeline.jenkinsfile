@@ -24,22 +24,26 @@ pipeline {
 
         stage('Build Project'){
             steps{
-                docker.image('node:16.18.1').inside{
-                    sh '''
-                        node -v
-                        npm install --force
-                        npm run build
-                    '''
+                script{
+                    docker.image('node:16.18.1').inside{
+                        sh '''
+                            node -v
+                            npm install --force
+                            npm run build
+                        '''
+                    }
                 }
             }
         }
 
         stage('Build Image and Push to Registry'){
             steps{
-                docker.withRegistry('', "${env.registryCredentialId}") {
-                    def customImage = docker.build("${env.registryUser}/reactjs-app:${env.imageTag}")
+                script{
+                    docker.withRegistry('', "${env.registryCredentialId}") {
+                        def customImage = docker.build("${env.registryUser}/reactjs-app:${env.imageTag}")
 
-                    customImage.push()
+                        customImage.push()
+                    }
                 }
             }
         }
