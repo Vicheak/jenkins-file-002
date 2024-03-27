@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    triggers {
+        GenericTrigger(
+            genericVariables: [
+                [key: 'ref', value: '$.ref']
+            ],
+            causeString: "Test GenericTrigger",
+            token: "admin123"
+        )
+    }
+
+    stages {
+        stage("Test Trigger") {
+            steps {
+                echo "Hello World, GenericTrigger!"
+            }
+        }
+    }
+}
