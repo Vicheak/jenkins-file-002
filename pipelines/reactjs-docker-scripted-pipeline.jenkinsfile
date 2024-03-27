@@ -1,0 +1,29 @@
+node('built-in'){
+    stage('Git Resource from Git'){ 
+        git branch: "main", url: 'https://github.com/Vicheak/reactjs-testing.git'
+    }
+
+    stage('Build Project'){
+        docker.image('node:16.18.1').inside{
+            sh '''
+                node -v
+                npm install --force
+                npm run build
+            '''
+        }
+    }
+
+    stage('Build Image and Push to Registry'){
+        docker.withRegistry('', "dockerhub") {
+            def customImage = docker.build("vicheak/reactjs-app:latest")
+
+            customImage.push()
+        }
+    }
+
+    stage('Deploy Container'){
+        docker.image("vicheak/reactjs-app:latest").withRun('-p 5500:8080'){
+            sh 'docker ps -a'
+        }
+    }
+}
