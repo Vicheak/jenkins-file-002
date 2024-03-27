@@ -1,0 +1,22 @@
+pipeline {
+    agent {
+        docker {
+            image 'node:16.18.1'
+            arg '-u root'
+        }
+    }
+
+    stages {
+        stage('Git Resource from Git'){ 
+            steps{
+                git branch: 'main', url: 'https://github.com/Vicheak/reactjs-testing.git'
+            }
+        }
+
+        stage('Build and Deploy'){
+            steps{
+                sh 'docker compose up -d --build'
+            }
+        }
+    }
+}
