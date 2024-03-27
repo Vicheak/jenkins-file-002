@@ -1,23 +1,47 @@
 pipeline {
     agent {
-        docker {
-            image 'node:16.18.1'
-            args '-u root'
-        }
+        // docker {
+        //     image 'node:16.18.1'
+        //     args '-u root'
+        // }
+
+        label 'built-in'
+    }
+
+    environment {
+        projectBranch = "main"
+        imageTag = "${BUILD_NUMBER}"
+        registryUser = "vicheak"
+        registryCredentialId = "dockerhub"
     }
 
     stages {
         stage('Git Resource from Git'){ 
             steps{
-                git branch: 'main', url: 'https://github.com/Vicheak/reactjs-testing.git'
+                git branch: "${env.projectBranch}", url: 'https://github.com/Vicheak/reactjs-testing.git'
             }
         }
 
-        stage('Build and Deploy'){
+        stage('Build Project'){
             steps{
-                sh 'node -v'
+                docker.image('node:16.18.1').inside{
+                    sh '''
+                        node -v
+                        npm install --force
+                        npm run build
+                    '''
+                }
             }
         }
 
+        stage('Build Image and Push to Registry'){
+            steps{
+                docker.withRegistry('', "${env.registryCredentialId}") {
+                    def customImage = docker.build("${env.registryUser}/reactjs-app:${env.imageTag}")
+
+                    customImage.push()
+                }
+            }
+        }
     }
 }
