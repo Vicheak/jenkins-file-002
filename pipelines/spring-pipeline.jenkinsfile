@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    environment {
+        imageTag = ${BUILD_NUMBER}
+        registryUser = "vicheak"
+    }
+
+    stages {
+        stage('Get Resource from Git'){
+            steps{
+                git branch: 'main', url: 'https://gitlab.com/SuonVicheak/spring-files-api.git'
+            }
+        }
+
+        stage('Build Image'){
+            steps{
+                sh "docker build -t ${env.registryUser}/spring-app:${env.imageTag} ."
+            }
+        }
+
+        stage('Push to Registry'){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                    sh """
+                        docker login -u $USER -p $PASS
+                        docker push $USER/spring-app:${env.imageTag}
+                    """
+                }
+            }
+        }
+
+        stage('Doploy Container'){
+            steps{
+                script {
+                    try{
+                        sh 'docker rm -f spring-api' 
+                    }catch(err){
+                        echo "Error : " + err
+                    }
+                }
+                sh """
+                    docker run --name spring-api -d -p 5600:8080 -v /home/vicheak/workspace:/workspace ${env.registryUser}/spring-app:${env.imageTag}
+                    curl ifconfig.me
+                """
+            }
+        }
+
+        stage(){
+            steps{
+                
+            }
+        }
+    }
+}
