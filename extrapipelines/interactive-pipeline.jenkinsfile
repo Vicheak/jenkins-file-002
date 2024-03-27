@@ -2,6 +2,8 @@ pipeline {
     agent any
 
     parameters {
+        booleanParam(name: "TEST_BOOLEAN", defaultValue: true, description: "Sample boolean parameter")
+        string(name: "TEST_STRING", defaultValue: "test interactive params pipeline", trim: true, description: "Sample string parameter")
         choice(name: "TEST_CHOICE", choices: ["production", "staging", "development"], description: "Sample multi-choice parameter")
     }
 
@@ -15,15 +17,18 @@ pipeline {
     stages {
         stage('Test Choice'){
             steps {
-                echo "TEST_CHOICE : ${TEST_CHOICE}" 
+                echo "TEST_CHOICE : ${params.TEST_CHOICE}" 
                 script {
                     def gitBranch = "${TEST_CHOICE}"
                     if(gitBranch == "production"){
                         echo "Production Environment"
+                        git branch: "production", url: 'https://github.com/Vicheak/reactjs-testing.git'
                     }else if(gitBranch == "staging"){
                         echo "Staging Environment"
+                        git branch: "staging", url: 'https://github.com/Vicheak/reactjs-testing.git'
                     }else{
                         echo "Development Environment"
+                        git branch: "development", url: 'https://github.com/Vicheak/reactjs-testing.git'
                     }
                 }
             }
