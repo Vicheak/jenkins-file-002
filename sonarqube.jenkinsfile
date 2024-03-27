@@ -1,33 +1,32 @@
 pipeline {
     agent any;
+
     tools{
-        gradle 'gradle-8.7'
+        gradle 'gradle'
     }
 
     stages {
-        stage('Get Resource from git') {
+        stage('Get Resource from Git') {
             steps {
-                git branch: 'main', url: 'https://github.com/MuyleangIng/dev-fileupload.git'
+                git branch: 'main', url: 'https://github.com/Vicheak/working-with-multipart-file.git'
             }
         }
-        stage('Build') {
+
+        stage('Build Gradle') {
             steps {
                 sh 'gradle clean build'
             }
         }
-        stage('scan sonarqube') {
+
+        stage('Scan SonarQube') {
             steps {
                 withSonarQubeEnv(installationName:'sonarqube') {
-                     sh """
-                     chmod +x gradlew
-
-                     ./gradlew sonar
-                     """
+                    sh """
+                        chmod +x gradlew
+                        ./gradlew sonar
+                    """
                 }
             }
         }
-        
     }
 }
-
-this one with sonaqube
