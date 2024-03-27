@@ -18,34 +18,11 @@ pipeline {
     }
 
     stages {
-        stage('Get Resource from Git'){ 
-            steps{
-                git branch: "${env.projectBranch}", url: 'https://github.com/Vicheak/reactjs-testing.git'
-            }
-        }
-
-        stage('Build Project'){
-            steps{
-                script{
-                    docker.image('node:21.7.1').inside{
-                        sh '''
-                            node -v
-                            npm install --force
-                            npm run build
-                        '''
-                    }
-                }
-            }
-        }
-
-        stage('Build Image and Push to Registry'){
-            steps{
-                script{
-                    docker.withRegistry('', "${env.registryCredentialId}") {
-                        def customImage = docker.build("${env.registryUser}/reactjs-app:${env.imageTag}")
-
-                        customImage.push()
-                    }
+        stage('Test Choice'){
+            steps {
+                echo "TEST_CHOICE : ${TEST_CHOICE}" 
+                script {
+                    def gitBranch = "${TEST_CHOICE}"
                 }
             }
         }
