@@ -9,8 +9,8 @@ pipeline {
         stage('Get Resource from Git'){
             steps {
                 echo "Checking out Git on node ${NODE_NAME} and node label ${NODE_LABELS}"
-                //git branch: 'main', url: 'https://github.com/Vicheak/reactjs-testing.git'
-                git 'https://github.com/Vicheak/reactjs-testing.git'
+                git branch: 'main', url: 'https://github.com/Vicheak/reactjs-testing.git'
+                //git 'https://github.com/Vicheak/reactjs-testing.git'
             }
         }
 
