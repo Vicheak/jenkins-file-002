@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TODAY = "Monday" # local variable
+        TODAY = "Monday" //local variable
     }
 
     stages {
