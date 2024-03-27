@@ -1,0 +1,50 @@
+pipeline {
+    agent {
+        label 'worker1'
+    }
+    
+    stages {
+        stage('Get Resource from Git') {
+            steps {
+                git branch: 'main', 
+                url: 'https://gitlab.com/SuonVicheak/spring-files-api.git'
+            }
+        }
+        
+        stage('Listing Resource'){
+            steps {
+                sh '''
+                    ls -lrt
+                    pwd
+                '''
+            }
+        }
+        
+        stage('Remove and Cleanup'){
+            steps {
+                sh '''
+                    docker rm -f spring-api
+                    docker rmi -f spring-app:latest
+                '''
+            }
+        }
+        
+        stage('Build Dockerfile'){
+            steps {
+                sh '''
+                    docker build -t spring-app:latest .
+                '''
+            }
+        }
+        
+        stage('Deploy API'){
+            steps {
+                sh '''
+                    docker run --name spring-api -d -p 5600:8080 -v /home/vicheak/workspace:/workspace spring-app
+                    docker image prune -f
+                    curl ifconfig.me
+                '''
+            }
+        }
+    }
+}

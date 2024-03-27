@@ -1,0 +1,28 @@
+// library identifier: 'devops-library@main', retriever: modernSCM(
+//     [
+//     $class: 'GitSCMSource',
+//     remote: 'https://github.com/Vicheak/devops-library.git',
+//     credentialsId: ''
+//     ])
+
+@Library(['devops-library']) _
+
+pipeline {
+    agent {
+        label 'built-in'
+    }
+
+    stages {
+        stage('With Jenkins Library') {
+            steps {
+                hello("Vicheak")
+            }
+        }
+        
+        stage('Hello'){
+            steps { 
+                echo "Hello World"
+            }
+        }
+    }
+}

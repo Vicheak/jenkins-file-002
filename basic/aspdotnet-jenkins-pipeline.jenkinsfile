@@ -1,0 +1,70 @@
+pipeline {
+    agent {
+        label 'worker1'
+    }
+    
+    stages {
+        stage('Get Resource from Git') {
+            agent {
+                label 'worker1'
+            }
+            
+            steps {
+                git branch: 'main', 
+                url: 'https://gitlab.com/SuonVicheak/dotnet-api.git'
+            }
+        }
+        
+        stage('Listing Resource'){
+            agent {
+                label 'worker1'
+            }
+            
+            steps {
+                sh '''
+                    ls -lrt
+                    pwd
+                '''
+            }
+        }
+        
+        stage('Remove and Cleanup'){
+            agent {
+                label 'worker1'
+            }
+            
+            steps {
+                sh '''
+                    docker rm -f aspdotnet-api
+                    docker rmi -f vicheak/aspdotnet-api:latest
+                '''
+            }
+        }
+        
+        stage('Build Dockerfile'){
+            agent {
+                label 'worker1'
+            }
+            
+            steps {
+                sh '''
+                    docker build -t vicheak/aspdotnet-api:latest .
+                '''
+            }
+        }
+        
+        stage('Deploy API'){
+            agent {
+                label 'worker1'
+            }
+        
+            steps {
+                sh '''
+                    docker run --name aspdotnet-api -d -p 5300:80 vicheak/aspdotnet-api:latest
+                    docker image prune -f
+                    curl ifconfig.me
+                '''
+            }
+        }
+    }
+}

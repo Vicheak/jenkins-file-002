@@ -1,0 +1,62 @@
+pipeline {
+    agent {
+        label 'worker1'
+    }
+    
+    tools {
+        nodejs 'nodejs'
+    }
+
+    stages {
+        stage('Get Resource from Git') {
+            steps {
+                git branch: 'main', 
+                url: 'https://SuonVicheak:glpat-7LzbAiffLQsvJ6GYGUrG@gitlab.com/SuonVicheak/002-react-project.git'
+            }
+        }
+        
+        stage('Build Reactjs with Node'){
+            steps {
+                sh '''
+                    node -v
+                    pwd
+                    npm install --force
+                    npm run build
+                '''
+            }
+        }
+        
+        stage('Remove and Cleanup'){
+            steps {
+                sh '''
+                    docker rm -f reactjs-app
+                    docker rmi -f vicheak/reactjs-app:1.1
+                '''
+            }
+        }
+        
+        stage('Build Dockerfile'){
+            steps {
+                sh '''
+                    docker build -t vicheak/reactjs-app:1.1 .
+                    docker push vicheak/reactjs-app:1.1
+                '''
+            }
+        }
+        
+        stage('Deploy ReactJS'){
+            agent {
+                label 'worker1'
+            }
+            
+            steps {
+                sh '''
+                    docker pull vicheak/reactjs-app:1.1
+                    docker run --name reactjs-app -d -p 5500:80 vicheak/reactjs-app:1.1
+                    docker image prune -f
+                    curl ifconfig.me
+                '''
+            }
+        }
+    }
+}
