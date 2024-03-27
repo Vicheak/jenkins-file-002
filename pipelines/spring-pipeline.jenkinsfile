@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        imageTag = ${BUILD_NUMBER}
+        imageTag = "${BUILD_NUMBER}"
         registryUser = "vicheak"
     }
 
