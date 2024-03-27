@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+
+    environment {
+        TODAY = "Monday" # local variable
+    }
+
+    stages {
+        stage('Hello') {
+            steps {
+                echo "TODAY is ${TODAY}"
+                echo "Build Number: ${env.BUILD_NUMBER}" # Built-in variables
+            }
+        }
+    }
+}
