@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs
+    }
+
+    stages {
+        stage('Get Resource from Git'){
+            steps {
+                echo "Checking out Git on node ${NODE_NAME} and node label ${NODE_LABELS}"
+                //git branch: 'main', url: 'https://github.com/Vicheak/reactjs-testing.git'
+                git 'https://github.com/Vicheak/reactjs-testing.git'
+            }
+        }
+
+        stage('Build in Jenkins'){
+            steps {
+                echo "Build in Jenkins"
+                sh '''
+                    docker install --force
+                    docker run build
+                '''
+            }
+        }
+
+        stage('Docker Compose Stage'){
+            steps {
+                echo "Building Image from Dockerfile"
+                sh 'docker compose up -d --build'
+            }
+        }
+    }
+}
