@@ -18,6 +18,13 @@ pipeline {
                 echo "TEST_CHOICE : ${TEST_CHOICE}" 
                 script {
                     def gitBranch = "${TEST_CHOICE}"
+                    if(gitBranch == "production"){
+                        echo "Production Environment"
+                    }else if(gitBranch == "staging"){
+                        echo "Staging Environment"
+                    }else{
+                        echo "Development Environment"
+                    }
                 }
             }
         }
