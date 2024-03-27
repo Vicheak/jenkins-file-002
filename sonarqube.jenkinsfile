@@ -20,7 +20,7 @@ pipeline {
 
         stage('Scan SonarQube') {
             steps {
-                withSonarQubeEnv(installationName:'sonarqube') {
+                withSonarQubeEnv(installationName:'sonarqube-admin') {
                     sh """
                         chmod +x gradlew
                         ./gradlew sonar
