@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    options {
+        timeout(time: 5, unit: 'SECONDS')
+        buildDiscarder logRotator(numToKeepStr: '3', daysToKeepStr: '7')
+    }
+
+    stages {
+        stage('Stage One'){
+            options {
+                retry(3)
+            }
+
+            steps {
+                script {
+                    sh 'sleep 3'
+                    throw new Exception("Terminate Pipeline")
+                }
+                echo "Hello Stage One"
+            }
+
+            post {
+                always {
+                    script {
+                        if(currentBuild.result == 'SUCCESS'){
+                            echo "Hello SUCCESS"          
+                        }else if(currentBuild.result == 'FAILURE'){
+                            echo "Hello FAILURE"
+                        }else {
+                            echo "Something Else!"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
