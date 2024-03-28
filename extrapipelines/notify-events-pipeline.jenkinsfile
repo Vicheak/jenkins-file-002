@@ -1,0 +1,61 @@
+pipeline {
+    agent {
+        docker {
+            image 'node:21.7.1'
+            args '-u root'
+        }
+    }
+
+    environment {
+        projectBranch = "main"
+        imageTag = "${BUILD_NUMBER}"
+        registryUser = "vicheak"
+        registryCredentialId = "dockerhub"
+    }
+
+    stages {
+        stage('Get Resource from Git'){ 
+            steps{
+                git branch: "${env.projectBranch}", url: 'https://github.com/Vicheak/reactjs-testing.git'
+            }
+        }
+
+        stage('Build Project'){
+            steps{
+                script{
+                    docker.image('node:21.7.1').inside{
+                        sh '''
+                            node -v
+                            npm install --force
+                            npm run build
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Build Image and Push to Registry'){
+            steps{
+                script{
+                    docker.withRegistry('', "${env.registryCredentialId}") {
+                        def customImage = docker.build("${env.registryUser}/reactjs-app:${env.imageTag}")
+
+                        customImage.push()
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            notifyEvents message: "Build successfully! <b>https://jenkins.vicheakautomate.online/job/${JOB_BASE_NAME}/${BUILD_NUMBER}/consoleText</b>", 
+                         token: 'nqsdodyeuqzu-7t6pp6wumwqfkbn7eyc'
+        }
+
+        failure {
+            notifyEvents message: "Build failed! <b>https://jenkins.vicheakautomate.online/job/${JOB_BASE_NAME}/${BUILD_NUMBER}/consoleText</b>", 
+                         token: 'nqsdodyeuqzu-7t6pp6wumwqfkbn7eyc'
+        }
+    }
+}
