@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Wait 5 seconds'){
+            steps {
+                cleanWs()
+                sh '''
+                    mkdir -p production
+                    sleep 5
+                '''
+            }
+        }
+
+        stage('Start Operation'){
+            parallel {
+                stage('Project Resource'){
+                    steps {
+                        dir("${WORKSPACE}/production"){
+                            sh 'touch resource.txt'
+                        }
+                    }
+                }
+
+                stage('Build'){
+                    steps { 
+                        script {
+                            for(int i = 1; i <= 3; i++){
+                                sh "touch file${i}"
+                            }
+                        }
+                    }
+                }
+
+                stage('Deploy'){
+                    steps {
+                        sh """
+                            touch deploy.txt
+                            echo 'JOB : ${JOB_NAME}, BUILD : ${BUILD_NUMBER} deploy successfully!'
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
