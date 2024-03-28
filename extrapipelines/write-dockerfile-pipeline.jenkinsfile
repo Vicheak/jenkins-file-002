@@ -54,7 +54,7 @@ pipeline {
                     '''
 
                     //write Dockerfile Content to a file inside workspace
-                    writeFile file: 'Dockerfile', text: dockerfileContent
+                    writeFile file: 'Dockerfile', text: dockerFileContent
                 }
             }
         }
