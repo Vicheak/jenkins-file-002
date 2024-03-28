@@ -1,0 +1,65 @@
+pipeline {
+    agent {
+        docker {
+            image 'node:21.7.1'
+            args '-u root'
+        }
+    }
+
+    environment {
+        projectBranch = "main"
+        imageTag = "${BUILD_NUMBER}"
+        registryUser = "vicheak"
+        registryCredentialId = "dockerhub"
+    }
+
+    stages{
+        stage('Get Resource from Git'){ 
+            steps{
+                git branch: "${env.projectBranch}", url: 'https://github.com/Vicheak/reactjs-testing.git'
+            }
+        }
+
+        stage('Build Project'){
+            steps{
+                script{
+                    docker.image('node:21.7.1').inside{
+                        sh '''
+                            node -v
+                            npm install --force
+                            npm run build
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Build Image and Push to Registry'){
+            steps{
+                script{
+                    docker.withRegistry('', "${env.registryCredentialId}") {
+                        def customImage = docker.build("${env.registryUser}/reactjs-app:${env.imageTag}")
+
+                        customImage.push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Container'){
+            steps {
+                sh "docker run --name reactjs-app -d -p 5500:80 ${env.registryUser}/reactjs-app:${env.imageTag}"
+            }
+        }
+    }
+
+    post {
+        success {
+            mail bcc: '', body: 'Deploy successfully', cc: '', from: 'suonvicheak991@gmai.com', replyTo: '', subject: 'CI/CD pipeline', to: 'suonvicheak991@gmail.com'
+        }
+
+        failure {
+            mail bcc: '', body: 'Deploy failed', cc: '', from: 'suonvicheak991@gmai.com', replyTo: '', subject: 'CI/CD pipeline', to: 'suonvicheak991@gmail.com'
+        }
+    }
+}
