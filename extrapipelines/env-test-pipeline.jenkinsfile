@@ -8,8 +8,11 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                echo "TODAY is ${TODAY}"
+                echo "TODAY is : ${TODAY}"
                 echo "Build Number : ${env.BUILD_NUMBER}" //Built-in variables
+                echo "Branch Name : ${env.BRANCH_NAME}"
+                echo "Branch Primary : ${env.BRANCH_IS_PRIMARY}"
+                echo "Job Name : ${JOB_NAME}"
             }
         }
     }
