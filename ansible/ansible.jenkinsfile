@@ -36,15 +36,15 @@ pipeline {
             }
         }
 
-        stage('Ansible Create Folder') {
-            steps {
-                script {
-                    sh ''' 
-                        ansible-playbook -i ansible/hosts ansible/create-folder.yml
-                    '''
-                }
-            }
-        }
+        // stage('Ansible Create Folder') {
+        //     steps {
+        //         script {
+        //             sh ''' 
+        //                 ansible-playbook -i ansible/hosts ansible/create-folder.yml
+        //             '''
+        //         }
+        //     }
+        // }
 
         stage('Ansible Deploy with Docker on Remote Server') {
             steps {
