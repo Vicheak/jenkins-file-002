@@ -7,8 +7,8 @@
     internal_port: "{{ internal_port }}"
     docker_image: "{{ docker_image }}"
     domain_name: "{{ domain_name }}"
-    app_port: "{{ app_port }}"
-    
+    app_port: " {{ external_port }}"
+
   tasks:
     - name: Deploy with Docker
       command: docker run --name react-app -d -p "{{ external_port }}":"{{ internal_port }}" "{{ docker_image }}"
