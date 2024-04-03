@@ -35,5 +35,15 @@ pipeline {
                 }
             }
         }
+
+         stage('Ansible Create Folder') {
+            steps {
+                script {
+                    sh ''' 
+                        ansible-playbook -i ansible/hosts ansible/create-folder.yml
+                    '''
+                }
+            }
+        }
     }
 }

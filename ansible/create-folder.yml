@@ -1,0 +1,16 @@
+- name: Execute ShellScript 
+  hosts: workers
+  become: true
+  tasks:
+    - name: Create a directory 
+      file: 
+        path: /vicheak/ansible-folder-test
+        state: directory
+        mode: 0755
+    # - name: Copy the shellscript to the remote server
+    #   copy:
+    #     src: ../shellscript/createfolder.sh
+    #     dest: /vicheak/test-folder/
+    #     mode: '0755'
+    # - name: Execute the shellscript
+    #   command: sudo /bin/bash /vicheak/test-folder/createfolder.sh
