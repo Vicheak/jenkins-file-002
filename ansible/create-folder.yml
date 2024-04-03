@@ -14,5 +14,5 @@
         src: ../shellscript/script1.sh
         dest: /home/vicheak/ansible-folder-test
         mode: 0755
-    # - name: Execute the shellscript
-    #   command: sudo /bin/bash /vicheak/test-folder/createfolder.sh
+    - name: Execute the shellscript
+      command: sudo /bin/bash /home/vicheak/ansible-folder-test/script1.sh
