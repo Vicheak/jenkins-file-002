@@ -11,7 +11,7 @@
     #   command: cp -r ../shellscript/* /home/vicheak/ansible-folder-test
     - name: Copy the shellscript to the remote server
       copy:
-        src: ../shellscript/*
+        src: shellscript/*
         dest: /home/vicheak/ansible-folder-test
         mode: 0755
     # - name: Execute the shellscript
