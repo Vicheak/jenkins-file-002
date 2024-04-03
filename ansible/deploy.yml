@@ -8,4 +8,4 @@
     docker_image: "{{ docker_image }}"
   tasks:
     - name: Deploy with docker
-      command: docker run --name dotnet-api -d -p "{{ external_port }}":"{{ internal_port }}" "{{ docker_image }}"
+      command: docker run --name react-app -d -p "{{ external_port }}":"{{ internal_port }}" "{{ docker_image }}"
