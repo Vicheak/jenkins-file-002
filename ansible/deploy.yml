@@ -7,7 +7,7 @@
     internal_port: "{{ internal_port }}"
     docker_image: "{{ docker_image }}"
     domain_name: "{{ domain_name }}"
-    app_port: " {{ external_port }}"
+    app_port: "{{ external_port }}"
 
   tasks:
     - name: Deploy with Docker
