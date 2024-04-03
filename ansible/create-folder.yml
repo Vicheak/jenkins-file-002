@@ -4,7 +4,7 @@
   tasks:
     - name: Create a directory 
       file: 
-        path: /vicheak/ansible-folder-test
+        path: /home/vicheak/ansible-folder-test
         state: directory
         mode: 0755
     # - name: Copy the shellscript to the remote server
