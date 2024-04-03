@@ -49,3 +49,9 @@
     #     ports:
     #       - "{{ docker_port }}"
     #     restart_policy: always
+
+  handlers:
+  - name: Reload Nginx
+    service:
+      name: nginx
+      state: reloaded
