@@ -17,7 +17,10 @@ pipeline {
         stage('Check Ansible Version') {
             steps {
                 script {
-                    sh 'ansible --version'
+                    sh ''''
+                        ansible --version
+                        ansible -i ansible/hosts workers -m ping
+                    '''
                 }
             }
         }
