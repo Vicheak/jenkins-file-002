@@ -54,6 +54,7 @@ pipeline {
                         -e "external_port=5500" \
                         -e "internal_port=80" \
                         -e "docker_image=vicheak/reactjs-app:latest" \
+                        -e "domain_name=jinja.vicheakautomate.online" \
                     '''
                 }
             }

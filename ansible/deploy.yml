@@ -6,6 +6,46 @@
     external_port: "{{ external_port }}"
     internal_port: "{{ internal_port }}"
     docker_image: "{{ docker_image }}"
+    domain_name: "{{ domain_name }}"
+    app_port: "{{ app_port }}"
+    
   tasks:
-    - name: Deploy with docker
+    - name: Deploy with Docker
       command: docker run --name react-app -d -p "{{ external_port }}":"{{ internal_port }}" "{{ docker_image }}"
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Setup Nginx Server Block
+      template:
+        src: nginx_domain.conf.j2
+        dest: "/etc/nginx/sites-available/{{ domain_name }}"
+
+    - name: Enable Nginx Configuration
+      file:
+        src: "/etc/nginx/sites-available/{{ domain_name }}"
+        dest: "/etc/nginx/sites-enabled/{{ domain_name }}"
+        state: link
+
+    - name: Reload Nginx to apply changes
+      service:
+        name: nginx
+        state: reloaded
+
+    - name: Obtain and Install SSL Certificate with Certbot
+      command: certbot --nginx -d {{ domain_name }} --non-interactive --agree-tos -m your@email.com --redirect
+      args:
+        creates: /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem
+      notify:
+        - Reload Nginx
+    
+    # - name: Run Docker container
+    #   docker_container:
+    #     name: "{{ docker_container_name }}"
+    #     image: "{{ docker_image }}"
+    #     state: started
+    #     ports:
+    #       - "{{ docker_port }}"
+    #     restart_policy: always
