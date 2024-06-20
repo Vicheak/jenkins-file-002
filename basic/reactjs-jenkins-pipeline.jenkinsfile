@@ -11,7 +11,7 @@ pipeline {
         stage('Get Resource from Git') {
             steps {
                 git branch: 'main', 
-                url: 'https://SuonVicheak:glpat-7LzbAiffLQsvJ6GYGUrG@gitlab.com/SuonVicheak/002-react-project.git'
+                url: 'https://@gitlab.com/SuonVicheak/002-react-project.git'
             }
         }
         
