@@ -23,7 +23,7 @@ pipeline {
         stage('Build Project'){
             steps{
                 script{
-                    docker.image('node:21.7.1').inside{
+                    docker.image('node:22.3.0').inside{
                         sh '''
                             node -v
                             npm install --force
