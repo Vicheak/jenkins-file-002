@@ -10,11 +10,23 @@ pipeline {
             steps {
                 echo "TODAY is : ${TODAY}"
                 echo "Job Display URL : ${env.JOB_DISPLAY_URL}"
+                echo "Run Display URL : ${env.RUN_DISPLAY_URL}"
                 echo "Build Number : ${env.BUILD_NUMBER}" //Built-in variables
-                echo "Branch Name : ${env.BRANCH_NAME}"
-                echo "Branch Primary : ${env.BRANCH_IS_PRIMARY}"
+                echo "Build ID : ${env.BUILD_ID}"
+                echo "Build Display Name : ${env.BUILD_DISPLAY_NAME}"
                 echo "Job Name : ${JOB_NAME}"
-                
+                echo "Job Base Name : ${env.JOB_BASE_NAME}"
+                echo "Build Tag : ${env.BUILD_TAG}"
+                echo "Executor Number : ${env.EXECUTOR_NUMBER}"
+                echo "Node Name : ${NODE_NAME}" 
+                echo "Node Label : ${NODE_LABELS}"
+                echo "Workspace : ${WORKSPACE}"
+                echo "Workspace Tmp : ${WORKSPACE_TMP}"
+                echo "Jenkins Home : ${JENKINS_HOME}"
+                echo "Jenkins URL : ${JENKINS_URL}"
+                echo "Build URL : ${BUILD_URL}"
+                echo "Job URL : ${JOB_URL}"
+                echo "Git Author Email : ${GIT_AUTHOR_EMAIL}"
             }
         }
     }
