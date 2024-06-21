@@ -4,7 +4,7 @@ node('built-in'){
     }
 
     stage('Build Project'){
-        docker.image('node:16.18.1').inside{
+        docker.image('node:22.3.0').inside{
             sh '''
                 node -v
                 npm install --force
