@@ -1,11 +1,11 @@
 pipeline {
     agent {
-        // docker {
-        //     image 'node:16.18.1'
-        //     args '-u root'
-        // }
+        docker {
+            image 'node:16.18.1'
+            args '-u root'
+        }
 
-        label 'built-in'
+        // label 'built-in'
     }
 
     environment {
