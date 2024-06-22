@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     sh 'sleep 3'
-                    throw new Exception("Terminate Pipeline")
+                    // throw new Exception("Terminate Pipeline")
                 }
                 echo "Hello Stage One"
             }
