@@ -17,6 +17,8 @@ pipeline {
     stages {
         stage('Test Choice'){
             steps {
+                echo "TEST_BOOLEAN : ${params.TEST_BOOLEAN}"
+                echo "TEST_STRING : ${params.TEST_STRING}"
                 echo "TEST_CHOICE : ${params.TEST_CHOICE}" 
                 script {
                     def gitBranch = "${TEST_CHOICE}"
