@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    parameters{
+        booleanParam(name: "IS_CLEAN", defaultValue: false, description: "Clean your workspace?")
+    }
+    
+    stages {
+        stage('Get Resource from Git'){ 
+            steps{
+                git branch: main, url: 'https://github.com/Vicheak/reactjs-testing.git'
+            }
+        }
+
+        stage('Clean Your Workspace') {
+            when {
+                expression{
+                    return “${param.IS_CLEAN}” == “true”
+                }
+            }
+        
+            steps {
+                cleanWs() 
+            }
+        }
+    }
+}
