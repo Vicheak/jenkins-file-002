@@ -15,7 +15,7 @@ pipeline {
         stage('Clean Your Workspace') {
             when {
                 expression{
-                    return “${param.IS_CLEAN}” == “true”
+                    return "${param.IS_CLEAN}" == "true"
                 }
             }
         
