@@ -22,7 +22,10 @@ pipeline {
                 script {
                     def isClean = "${params.IS_CLEAN}"
                     if(isClean == "true"){
+                        echo "Cleaning workspace!"
                         cleanWs() 
+                    }else{
+                        echo "Not cleaning workspace!"
                     }
                 }
             }
