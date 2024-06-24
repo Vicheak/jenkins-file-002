@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'node:21.7.1'
+            image 'node:22.3.0'
             args '-u root'
         }
     }
@@ -23,7 +23,7 @@ pipeline {
         stage('Build Project'){
             steps{
                 script{
-                    docker.image('node:21.7.1').inside{
+                    docker.image('node:22.3.0').inside{
                         sh '''
                             node -v
                             npm install --force
@@ -49,12 +49,12 @@ pipeline {
 
     post {
         success {
-            notifyEvents message: "Build successfully! <b>https://jenkins.vicheakautomate.online/job/${JOB_BASE_NAME}/${BUILD_NUMBER}/consoleText</b>", 
+            notifyEvents message: "Build successfully! <b>https://jenkins.cheakautomate.online/job/${JOB_BASE_NAME}/${BUILD_NUMBER}/consoleText</b>", 
                          token: 'nqsdodyeuqzu-7t6pp6wumwqfkbn7eyc'
         }
 
         failure {
-            notifyEvents message: "Build failed! <b>https://jenkins.vicheakautomate.online/job/${JOB_BASE_NAME}/${BUILD_NUMBER}/consoleText</b>", 
+            notifyEvents message: "Build failed! <b>https://jenkins.cheakautomate.online/job/${JOB_BASE_NAME}/${BUILD_NUMBER}/consoleText</b>", 
                          token: 'nqsdodyeuqzu-7t6pp6wumwqfkbn7eyc'
         }
     }
