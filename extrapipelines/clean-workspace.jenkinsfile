@@ -15,12 +15,12 @@ pipeline {
         stage('Clean Your Workspace') {
             // when {
             //     expression{
-            //         return "${param.IS_CLEAN}" == "true"
+            //         return "${params.IS_CLEAN}" == "true"
             //     }
             // }        
             steps {
                 script {
-                    def isClean = "${param.IS_CLEAN}"
+                    def isClean = "${params.IS_CLEAN}"
                     if(isClean == "true"){
                         cleanWs() 
                     }
