@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     def isClean = "${param.IS_CLEAN}"
-                    if(isClean == true){
+                    if(isClean == "true"){
                         cleanWs() 
                     }
                 }
