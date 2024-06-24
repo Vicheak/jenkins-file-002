@@ -1,14 +1,14 @@
 pipeline {
     agent any
 
-    parameters{
+    parameters {
         booleanParam(name: "IS_CLEAN", defaultValue: false, description: "Clean your workspace?")
     }
     
     stages {
         stage('Get Resource from Git'){ 
             steps {
-                git branch: main, url: 'https://github.com/Vicheak/reactjs-testing.git'
+                git branch: 'main', url: 'https://github.com/Vicheak/reactjs-testing.git'
             }
         }
 
