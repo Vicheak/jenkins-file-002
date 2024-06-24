@@ -7,20 +7,24 @@ pipeline {
     
     stages {
         stage('Get Resource from Git'){ 
-            steps{
+            steps {
                 git branch: main, url: 'https://github.com/Vicheak/reactjs-testing.git'
             }
         }
 
         stage('Clean Your Workspace') {
-            when {
-                expression{
-                    return "${param.IS_CLEAN}" == "true"
-                }
-            }
-        
+            // when {
+            //     expression{
+            //         return "${param.IS_CLEAN}" == "true"
+            //     }
+            // }        
             steps {
-                cleanWs() 
+                script {
+                    def isClean = "${param.IS_CLEAN}"
+                    if(isClean == true){
+                        cleanWs() 
+                    }
+                }
             }
         }
     }
