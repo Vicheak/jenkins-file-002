@@ -50,12 +50,12 @@ pipeline {
     post {
         success {
             notifyEvents message: "Build successfully! <b>https://jenkins.cheakautomate.online/job/${JOB_BASE_NAME}/${BUILD_NUMBER}/consoleText</b>", 
-                         token: 'nqsdodyeuqzu-7t6pp6wumwqfkbn7eyc'
+                         token: 'oapamtwqhj1l9ackk9vwxgflgwwdjq1q'
         }
 
         failure {
             notifyEvents message: "Build failed! <b>https://jenkins.cheakautomate.online/job/${JOB_BASE_NAME}/${BUILD_NUMBER}/consoleText</b>", 
-                         token: 'nqsdodyeuqzu-7t6pp6wumwqfkbn7eyc'
+                         token: 'oapamtwqhj1l9ackk9vwxgflgwwdjq1q'
         }
     }
 }
