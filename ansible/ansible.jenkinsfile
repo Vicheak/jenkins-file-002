@@ -36,28 +36,28 @@ pipeline {
             }
         }
 
-        stage('Ansible Create Folder') {
-            steps {
-                script {
-                    sh ''' 
-                        ansible-playbook -i ansible/hosts ansible/create-folder.yml
-                    '''
-                }
-            }
-        }
-
-        // stage('Ansible Deploy with Docker on Remote Server') {
+        // stage('Ansible Create Folder') {
         //     steps {
         //         script {
         //             sh ''' 
-        //                 ansible-playbook -i ansible/hosts ansible/deploy.yml \
-        //                 -e "external_port=5500" \
-        //                 -e "internal_port=80" \
-        //                 -e "docker_image=vicheak/reactjs-app:latest" \
-        //                 -e "domain_name=jinja.vicheakautomate.online" \
+        //                 ansible-playbook -i ansible/hosts ansible/create-folder.yml
         //             '''
         //         }
         //     }
         // }
+
+        stage('Ansible Deploy with Docker on Remote Server') {
+            steps {
+                script {
+                    sh ''' 
+                        ansible-playbook -i ansible/hosts ansible/deploy.yml \
+                        -e "external_port=5500" \
+                        -e "internal_port=80" \
+                        -e "docker_image=vicheak/reactjs-app:latest" \
+                        -e "domain_name=jinja.cheakautomate.online" \
+                    '''
+                }
+            }
+        }
     }
 }
