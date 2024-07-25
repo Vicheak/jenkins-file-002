@@ -28,17 +28,17 @@ pipeline {
             }
         }
 
-        // stage('Push Docker Image') {
-        //     steps {
-        //         script{
-        //             withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-        //                 sh 'docker login -u $USER -p $PASS'
-        //                 sh 'docker push ${registry}/${imageName}:${tag}'
-        //                 sh 'docker rmi -f ${registry}/${imageName}:${tag}'
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Push Docker Image') {
+            steps {
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'docker login -u $USER -p $PASS'
+                        sh 'docker push ${registry}/${imageName}:${tag}'
+                        sh 'docker rmi -f ${registry}/${imageName}:${tag}'
+                    }
+                }
+            }
+        }
 
         // stage('Deploy Spring Boot with Kubernetes') {
         //     steps {
