@@ -40,26 +40,26 @@ pipeline {
             }
         }
 
-        // stage('Deploy Spring Boot with Kubernetes') {
-        //     steps {
-        //         echo "================== Pull Git for install Playbook =================="
-        //         git branch: 'main', url: 'https://gitlab.com/devops_gen_5/devops_shortcourse.git'
-        //         echo "================== Run run deploy =================="
-        //         script {
-        //             sh '''ansible --version
-        //             ansible -i ${WORKSPACE}/ansible/hosts all -m ping
-        //             ansible-playbook -i ${WORKSPACE}/ansible/hosts ${WORKSPACE}/ansible/deployspringwithk8s.yaml \
-        //             -e "registry=${registry} imageName=${imageName} tag=${tag}" 
-        //             '''    
-        //         }
-        //     }
-        // }
+        stage('Deploy Spring Boot with Kubernetes') {
+            steps {
+                echo "================== Pull Git for install Playbook =================="
+                git branch: 'main', url: 'https://github.com/Vicheak/ansible-config-001.git'
+                echo "================== Run run deploy =================="
+                script {
+                    sh '''ansible --version
+                    ansible -i ${WORKSPACE}/k8s_playbook/hosts all -m ping
+                    // ansible-playbook -i ${WORKSPACE}/ansible/hosts ${WORKSPACE}/ansible/deployspringwithk8s.yaml \
+                    // -e "registry=${registry} imageName=${imageName} tag=${tag}" 
+                    '''    
+                }
+            }
+        }
         
-        // stage('Clean workspace') {
-        //     steps {
-        //         cleanWs()
-        //     }
-        // }
+        stage('Clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
     }
 
     post {
