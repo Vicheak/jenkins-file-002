@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Deploy Spring Boot with Kubernetes') {
+        stage('Deploy Wordpress with Kubernetes') {
             steps {
                 echo "================== Pull Git for install Playbook =================="
                 git branch: 'main', url: 'https://github.com/Vicheak/ansible-config-001.git'
@@ -10,8 +10,7 @@ pipeline {
                 script {
                     sh '''ansible --version
                     ansible -i ${WORKSPACE}/k8s_playbook/hosts all -m ping
-                    ansible-playbook -i ${WORKSPACE}/k8s_playbook/hosts ${WORKSPACE}/k8s_playbook/deploy_wordpress.yaml \
-                    -e "registry=${registry} imageName=${imageName} tag=${tag}" 
+                    ansible-playbook -i ${WORKSPACE}/k8s_playbook/hosts ${WORKSPACE}/k8s_playbook/deploy_wordpress.yaml
                     '''    
                 }
             }
