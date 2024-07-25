@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    environment {
+        registry = "vicheak"
+        imageName = "portfolio"
+        tag = "latest"
+    }
+
+    stages {
+        stage('Deploy Spring Boot with Kubernetes') {
+            steps {
+                echo "================== Pull Git for install Playbook =================="
+                git branch: 'main', url: 'https://github.com/Vicheak/ansible-config-001.git'
+                echo "================== Run run deploy =================="
+                script {
+                    sh '''ansible --version
+                    ansible -i ${WORKSPACE}/k8s_playbook/hosts all -m ping
+                    ansible-playbook -i ${WORKSPACE}/k8s_playbook/hosts ${WORKSPACE}/k8s_playbook/deploy_portfolio.yaml \
+                    -e "registry=${registry} imageName=${imageName} tag=${tag}" 
+                    '''    
+                }
+            }
+        }
+        
+        stage('Clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Deploy into cluster successfully!'   
+        }
+        
+        failure {
+            echo 'The build failed.'
+        }
+    }
+}
