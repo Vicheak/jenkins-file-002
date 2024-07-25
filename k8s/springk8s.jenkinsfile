@@ -48,7 +48,7 @@ pipeline {
                 script {
                     sh '''ansible --version
                     ansible -i ${WORKSPACE}/k8s_playbook/hosts all -m ping
-                    ansible-playbook -i ${WORKSPACE}/k8s_playbook/hosts ${WORKSPACE}/k8s_playbook/deploy_spring_k8s.yaml \
+                    ansible-playbook -i ${WORKSPACE}/k8s_playbook/hosts ${WORKSPACE}/k8s_playbook/deploy_spring_k8s_domain.yaml \
                     -e "registry=${registry} imageName=${imageName} tag=${tag}" 
                     '''    
                 }
