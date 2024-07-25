@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         registry = "vicheak"
-        imageName = "springk8s"
+        imageName = "spring-app"
         // Ensure that BUILD_NUMBER is correctly referenced
         tag = "${BUILD_NUMBER}"
     }
