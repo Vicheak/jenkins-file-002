@@ -43,12 +43,16 @@ pipeline {
                 echo "================== Run deploy =================="
                 sh """
                     sed -i 's+image:.*+image: vicheak/spring-app:${tag}+g' argocd/spring/spring-application.yaml
-                    git config user.name 'Vicheak'
-                    git config user.email 'suonvicheak991@gmail.com'
+                    git config --global user.name 'Vicheak'
+                    git config --global user.email 'suonvicheak991@gmail.com'
                     git add argocd/spring/spring-application.yaml
                     git commit -m 'Update image ${imageName} to version ${tag}'
-                    git push https://Vicheak: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@github.com/Vicheak/k8s_orchestration.git
                 """
+                script { 
+                    withCredentials([usernamePassword(credentialsId: 'github_api_token', passwordVariable: 'TOKEN', usernameVariable: 'USER')]) {
+                        sh 'git push https://$USER:$TOKEN@github.com/Vicheak/k8s_orchestration.git'
+                    }
+                }
             }
         }
         
