@@ -47,7 +47,7 @@ pipeline {
                     git config user.email 'suonvicheak991@gmail.com'
                     git add argocd/spring/spring-application.yaml
                     git commit -m 'Update image ${imageName} to version ${tag}'
-                    git push https://Vicheak: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@github.com/Vicheak/k8s_orchestration.git
+                    git push https://Vicheak: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@github.com/Vicheak/k8s_orchestration.git
                 """
             }
         }
