@@ -38,7 +38,7 @@ pipeline {
 
         stage('Modify Kubernetes Deployment') {
             steps {
-                echo "================== Pull Git for install Playbook =================="
+                echo "================== Pull Git to change image version =================="
                 git branch: 'main', url: 'https://github.com/Vicheak/k8s_orchestration.git'
                 echo "================== Run deploy =================="
                 sh """
