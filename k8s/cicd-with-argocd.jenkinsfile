@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+
+    tools {
+        gradle 'gradle'
+    }
+
+    environment {
+        registry = "vicheak"
+        imageName = "spring-app"
+        tag = "${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Get Resource from Git') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Vicheak/working-with-multipart-file.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ${registry}/${imageName}:${tag} .'
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'docker login -u $USER -p $PASS'
+                        sh 'docker push ${registry}/${imageName}:${tag}'
+                        sh 'docker rmi -f ${registry}/${imageName}:${tag}'
+                    }
+                }
+            }
+        }
+
+        stage('Modify Kubernetes Deployment') {
+            steps {
+                echo "================== Pull Git for install Playbook =================="
+                git branch: 'main', url: 'https://github.com/Vicheak/k8s_orchestration.git'
+                echo "================== Run deploy =================="
+                sh """
+                    sed -i 's+image:.*+image: vicheak/spring-app:${tag}+g' argocd/spring/spring-application.yaml
+                    git config user.name 'Vicheak'
+                    git config user.email 'suonvicheak991@gmail.com'
+                    git add argocd/spring/spring-application.yaml
+                    git commit -m 'Update image ${imageName} to version ${tag}'
+                    git push https://Vicheak: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@github.com/Vicheak/k8s_orchestration.git
+                """
+            }
+        }
+        
+        stage('Clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'GitOps applyed into cluster successfully!'   
+        }
+        
+        failure {
+            echo 'GitOps failed.'
+        }
+    }
+}
