@@ -38,10 +38,10 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Vicheak/k8s_orchestration.git'
                 echo "================== Run deploy =================="
                 sh """
-                    sed -i 's+image:.*+image: vicheak/spring-app:${tag}+g' argocd/spring/spring-application.yaml
+                    sed -i 's+image:.*+image: vicheak/student-api:${tag}+g' test/api/spring-application.yaml
                     git config --global user.name 'Vicheak'
                     git config --global user.email 'suonvicheak991@gmail.com'
-                    git add argocd/spring/spring-application.yaml
+                    git add test/api/spring-application.yaml
                     git commit -m 'Update image ${imageName} to version ${tag}'
                 """
                 script { 
