@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Apply GitOps into Kubernetes Cluster') {
+            steps {
+                echo "================== Pull Git for install Playbook =================="
+                git branch: 'main', url: 'https://github.com/Vicheak/ansible-config-001.git'
+                echo "================== Run run deploy =================="
+                script {
+                    sh '''ansible --version
+                    ansible -i ${WORKSPACE}/k8s_playbook/hosts all -m ping
+                    ansible-playbook -i ${WORKSPACE}/k8s_playbook/hosts ${WORKSPACE}/k8s_playbook/apply_spring_argocd.yaml
+                    '''    
+                }
+            }
+        }
+        
+        stage('Clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'GitOps applyed into cluster successfully!'   
+        }
+        
+        failure {
+            echo 'GitOps failed.'
+        }
+    }
+}
