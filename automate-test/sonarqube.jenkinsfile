@@ -1,0 +1,35 @@
+pipeline {
+    agent any;
+
+    tools {
+        maven 'Maven'
+    }
+
+    stages {
+        stage('Get Resource from Git') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Vicheak/student-api.git'
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Scan SonarQube') {
+            steps {
+                withSonarQubeEnv('sonarqube-admin') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+    }
+}
