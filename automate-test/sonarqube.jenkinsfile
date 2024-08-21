@@ -35,13 +35,13 @@ pipeline {
 
     post {
         success {
-            sh 'curl -s -X POST https://api.telegram.org/bot7503919178:AAFKdh3ib2Vs3tVB3uTfIDfvhe0ErbfW8sM/sendMessage 
-            -d chat_id=-4541403715 -d text="Automate testing has been analyzed successfully!"'
+            sh 'curl -s -X POST 
+            https://api.telegram.org/bot7503919178:AAFKdh3ib2Vs3tVB3uTfIDfvhe0ErbfW8sM/sendMessage -d chat_id=-4541403715 -d text="Automate testing has been analyzed successfully!"'
         }
 
         failure {
-            sh 'curl -s -X POST https://api.telegram.org/bot7503919178:AAFKdh3ib2Vs3tVB3uTfIDfvhe0ErbfW8sM/sendMessage 
-            -d chat_id=-4541403715 -d text="Automate testing has been failed!"'
+            sh 'curl -s -X POST 
+            https://api.telegram.org/bot7503919178:AAFKdh3ib2Vs3tVB3uTfIDfvhe0ErbfW8sM/sendMessage -d chat_id=-4541403715 -d text="Automate testing has been failed!"'
         }
     }
 }
