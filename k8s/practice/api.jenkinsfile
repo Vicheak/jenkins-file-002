@@ -61,12 +61,12 @@ pipeline {
 
     post {
         success {
-            sh 'curl -s -X POST 
+            sh 'curl -s -X POST
             https://api.telegram.org/bot7503919178:AAFKdh3ib2Vs3tVB3uTfIDfvhe0ErbfW8sM/sendMessage -d chat_id=-4541403715 -d text="GitOps automation applyed into cluster successfully!"'
         }
 
         failure {
-            sh 'curl -s -X POST 
+            sh 'curl -s -X POST
             https://api.telegram.org/bot7503919178:AAFKdh3ib2Vs3tVB3uTfIDfvhe0ErbfW8sM/sendMessage -d chat_id=-4541403715 -d text="GitOps failed to automate the deployment!"'
         }
     }
