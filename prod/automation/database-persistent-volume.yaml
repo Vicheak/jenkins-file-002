@@ -1,0 +1,36 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: local-db-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: efree-dbserver-pv
+  namespace: microservice
+spec:
+  storageClassName: local-db-storage
+  claimRef:
+    name: efree-dbserver-pvc
+    namespace: microservice
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteMany
+  hostPath:
+    path: /mnt/data/efree-dbserver
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: efree-dbserver-pvc
+  namespace: microservice
+spec:
+  storageClassName: local-db-storage
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi

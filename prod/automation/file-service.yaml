@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-service-dpl
+  namespace: microservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: file-service
+  template:
+    metadata:
+      labels:
+        app: file-service
+    spec:
+      containers:
+      - name: file-service
+        image: vicheak/file-service:1.0.1
+        ports:
+        - containerPort: 8130
+        volumeMounts:
+        - name: file-service-volume
+          mountPath: /workspace/
+      volumes:
+      - name: file-service-volume
+        hostPath:
+          path: /opt/nfs/data/app/files
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: file-service-svc
+  namespace: microservice
+spec:
+  selector:
+    app: file-service
+  ports:
+  - protocol: TCP
+    port: 8130
+    targetPort: 8130
+  type: ClusterIP

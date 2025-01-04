@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service-dpl
+  namespace: microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-service
+  template:
+    metadata:
+      labels:
+        app: gateway-service
+    spec:
+      nodeSelector:
+        task: db-host
+      containers:
+      - name: gateway-service
+        image: vicheak/gateway-service:1.2.0
+        ports:
+        - containerPort: 9999
+        volumeMounts:
+        - name: gateway-api-volume
+          mountPath: /workspace/keys
+      volumes:
+      - name: gateway-api-volume
+        hostPath:
+          path: /opt/nfs/data/app/keys
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service-svc
+  namespace: microservice
+spec:
+  selector:
+    app: gateway-service
+  ports:
+  - protocol: TCP
+    port: 9999
+    targetPort: 9999
+  type: ClusterIP

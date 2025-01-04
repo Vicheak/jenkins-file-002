@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: efree-dbserver-config
+  namespace: microservice
+data:
+  postgresql.conf: |
+    max_connections = 1000
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: efree-dbserver-secret
+  namespace: microservice
+type: Opaque
+stringData:
+  POSTGRES_USER: "efree"
+  POSTGRES_PASSWORD: "efree@123"
+  POSTGRES_DB: "efree_db"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: efree-dbserver-dpl
+  namespace: microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: efree-dbserver
+  template:
+    metadata:
+      labels:
+        app: efree-dbserver
+    spec:
+      nodeSelector:
+        task: db-host
+      containers:
+      - name: efree-dbserver
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - secretRef:
+            name: efree-dbserver-secret
+            env:
+        - name: POSTGRES_CONFIG_FILE
+          value: /var/lib/postgresql/data/postgresql.conf
+        - name: PGDATA
+          value: /var/lib/postgresql/data
+        volumeMounts:
+        - name: db-storage
+          mountPath: /var/lib/postgresql/data 
+        - name: config-dbserver
+          mountPath: /etc/postgresql/conf.d/postgresql.conf
+          subPath: postgresql.conf
+      volumes:
+      - name: db-storage
+        persistentVolumeClaim:
+          claimName: efree-dbserver-pvc
+      - name: config-dbserver
+        configMap:
+          name: efree-dbserver-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: efree-dbserver-svc
+  namespace: microservice
+spec:
+  selector:
+    app: efree-dbserver
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+    nodePort: 30015
+  type: NodePort
+---
+
+
