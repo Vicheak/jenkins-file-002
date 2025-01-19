@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: client-app-service-ingress
+  namespace: microservice
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    kubernetes.io/ingressClassName: "nginx"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  tls:
+  - hosts:
+    - ecommerce.cheakautomate.online
+    secretName: client-efree-ingess-tls
+  rules:
+  - host: ecommerce.cheakautomate.online
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: client-app-service-svc
+            port:
+              number: 3000
