@@ -17,7 +17,7 @@ spec:
         task: db-host
       containers:
       - name: gateway-service
-        image: vicheak/gateway-service:1.2.0
+        image: vicheak/gateway-service:1.2.3
         ports:
         - containerPort: 9999
         volumeMounts:

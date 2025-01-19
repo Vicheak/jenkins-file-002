@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: category-service
-        image: vicheak/category-service:1.0.0
+        image: vicheak/category-service:1.0.1
         ports:
         - containerPort: 8080
 ---
