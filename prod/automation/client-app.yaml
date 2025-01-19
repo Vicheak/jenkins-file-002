@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: client-app-service
-        image: vicheak/efree-client-app:1.0.0
+        image: vicheak/efree-client-app:1.0.1
         ports:
         - containerPort: 3000
 ---
