@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: file-service
-        image: vicheak/file-service:1.0.3
+        image: vicheak/file-service:1.0.9
         ports:
         - containerPort: 8130
         volumeMounts:
