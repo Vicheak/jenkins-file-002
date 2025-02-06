@@ -1,0 +1,49 @@
+
+    // stage('Apply Kubernetes Manifests') {
+    //     steps {
+    //         script {
+    //             withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+    //                 sh """
+    //                     export KUBECONFIG=${KUBECONFIG}
+    //                     echo "Applying Kubernetes manifests..."
+    //                     kubectl apply -f *.yaml
+    //                 """
+    //             }
+    //         }
+    //     }
+    // }
+
+    // stage('Clean Workspace') {
+    //     steps {
+    //         cleanWs()
+    //     }
+    // }
+
+    // post {
+    //     always {
+    //         script {
+    //             try {
+    //                 def COMMITER = sh (
+    //                     script: 'git --no-pager show -s --format=\'%ae\'',
+    //                     returnStdout: true
+    //                 ).trim()
+    //                 def EMOTE = currentBuild.result == 'SUCCESS' ? '✅' : '❌'
+    //                 def DESC = currentBuild.result == 'SUCCESS' ? 'GitOps applyed into cluster successfully!' : 'GitOps applyed into cluster fail!'
+    //                 def STATUS = "${currentBuild.result}${EMOTE}"
+    //                 def MESSAGE = """
+    //                 <b>Status : </b>${STATUS}
+    //                 <b>Branch : </b>${env.GIT_BRANCH}
+    //                 <b>Commiter : </b>${COMMITER}
+    //                 <b>Commit ID : </b>${env.GIT_COMMIT}
+    //                 <b>Environment : </b>${ENV}
+    //                 <b>Build Url : </b> <a href=\"${BUILD_URL}\">view detail</a>
+    //                 <b>Description : </b>${DESC}
+    //                 """.stripIndent()
+
+    //                 sh "curl -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage -d chat_id=${TELEGRAM_CHAT_ID} -d text='${MESSAGE}' -d parse_mode=HTML --max-time 30"
+    //             } catch (Exception err) {
+    //                 echo "${err}"
+    //             }
+    //         }
+    //     }
+    // }
