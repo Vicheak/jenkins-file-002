@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+
+    environment {
+        registry = "vicheak"
+        imageName = "api-core"
+        tag = "${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Get Resource from Git') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Vicheak/api-core.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ${registry}/${imageName}:${tag} .'
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'docker login -u $USER -p $PASS'
+                        sh 'docker push ${registry}/${imageName}:${tag}'
+                        sh 'docker rmi -f ${registry}/${imageName}:${tag}'
+                    }
+                }
+            }
+        }
+
+        stage('Modify Kubernetes Deployment') {
+            steps {
+                echo "================== Pull Git to change image version =================="
+                git branch: 'main', url: 'https://github.com/Vicheak/k8s_orchestration.git'
+                echo "================== Run deploy =================="
+                sh """
+                    sed -i 's+image:.*+image: vicheak/api-core:${tag}+g' test_pipeline/api/api-application.yaml
+                    git config --global user.name 'Vicheak'
+                    git config --global user.email 'suonvicheak991@gmail.com'
+                    git add test_pipeline/api/api-application.yaml
+                    git commit -m 'Update image ${imageName} to version ${tag}'
+                """
+                script { 
+                    withCredentials([usernamePassword(credentialsId: 'github_api_token', passwordVariable: 'TOKEN', usernameVariable: 'USER')]) {
+                        sh 'git push https://$USER:$TOKEN@github.com/Vicheak/k8s_orchestration.git'
+                    }
+                }
+            }
+        }
+        
+        stage('Clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+    }
+
+    post {
+        success {
+            sh "curl -s -X POST https://api.telegram.org/bot7503919178:AAFKdh3ib2Vs3tVB3uTfIDfvhe0ErbfW8sM/sendMessage -d chat_id=-4541403715 -d text='GitOps automation applyed into cluster successfully!'"
+        }
+
+        failure {
+            sh "curl -s -X POST https://api.telegram.org/bot7503919178:AAFKdh3ib2Vs3tVB3uTfIDfvhe0ErbfW8sM/sendMessage -d chat_id=-4541403715 -d text='GitOps failed to automate the deployment!'"
+        }
+    }
+}

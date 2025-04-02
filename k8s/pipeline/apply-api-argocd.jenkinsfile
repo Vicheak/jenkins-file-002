@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Apply GitOps into Kubernetes Cluster') {
+            steps {
+                echo "================== Run apply manifest =================="
+                script {
+                    sh '''
+                    kubectl apply -f ${WORKSPACE}/k8s/pipeline/apply_argocd.yaml
+                    '''    
+                }
+            }
+        }
+        
+        stage('Clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'GitOps applyed into cluster successfully!'   
+        }
+        
+        failure {
+            echo 'GitOps failed.'
+        }
+    }
+}
